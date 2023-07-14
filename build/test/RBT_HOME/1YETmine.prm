@@ -33,6 +33,5 @@ SECTION PHARMA
     SCORING_FUNCTION RbtPharmaSF
     WEIGHT 1.0
     CONSTRAINTS_FILE mandatory_restraints.txt
-    OPTIONAL_FILE optional_restraints.txt
     NOPT 1
 END_SECTION

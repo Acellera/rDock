@@ -373,7 +373,7 @@ void RbtPosChargeConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) throw(
 void RbtSubgraphConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) throw(RbtError)
 {
 
-  cout << 'INSIDE ADDATOMLIST';
+  cout << "INSIDE ADDATOMLIST";
   // throw RbtError(_WHERE_, "HEREEE");
   // cout << selected_id << endl;
 
@@ -383,7 +383,7 @@ void RbtSubgraphConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) throw(R
   //   cout << *iter << endl;
   // }
 
-  cout << 'INSIDE ADDATOMLIST2' << endl;
+  cout << "INSIDE ADDATOMLIST2" << endl;
   // cout << selected_ids << endl;
   // throw RbtError(_WHERE_, "HEREEE");
   m_atomList = Rbt::GetAtomList(lig->GetAtomList(), Rbt::isAtomSubgraph());
