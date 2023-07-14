@@ -146,7 +146,7 @@ void RbtPharmaSF::SetupLigand()
     }
     for (RbtConstraintListIter iter = m_constrList.begin(); iter != m_constrList.end(); iter++)
     {
-      (*iter)->AddAtomList(GetLigand(), true);
+      (*iter)->AddAtomList(GetLigand(), true); // I would like to pass a stringlist here for one type of constraint (sub)
     }
     if (GetTrace() > 0)
     {
@@ -182,7 +182,7 @@ RbtDouble RbtPharmaSF::RawScore() const
   RbtInt i = 0;
   for (RbtConstraintListConstIter iter = m_constrList.begin(); iter != m_constrList.end(); iter++, i++)
   {
-    cout << "HERE3" << endl;
+    cout << "HERE33333" << endl;
     m_conScores[i] = (*iter)->Score();
   }
   total = std::accumulate(m_conScores.begin(), m_conScores.end(), total);

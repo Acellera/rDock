@@ -106,7 +106,7 @@ test:	./test/RBT_HOME/1koc.as ./test/RBT_HOME/1YET.as ./test/RBT_HOME/1YET_test.
 	@echo ""
 	@echo "Running rDock unit tests..."
 	@echo ""
-	@$(RBT_ROOT)/bin/rbdock -r1YETmine.prm -i ./test/RBT_HOME/1YET_c.sd -p dock.prm -n 2 -s 48151623 -o 1YET_test_out > 1YET_test_out.log
+	@$(RBT_ROOT)/bin/rbdock -r1YETmine.prm -i ./test/RBT_HOME/1YET_c.sd -p dock.prm -n 20 -s 48151623 -o 1YET_test_out > 1YET_test_out.log
 	@mv 1YET_test_out.log 1YET_test_out.sd ./test/RBT_HOME/
 	@python ./test/RBT_HOME/check_test.py ./test/RBT_HOME/1YET_reference_out.sd ./test/RBT_HOME/1YET_test_out.sd
 

@@ -13,7 +13,7 @@ SECTION MAPPER
         SITE_MAPPER RbtLigandSiteMapper
         VOL_INCR 0.0
         GRIDSTEP 0.5
-        RADIUS 6.0
+        RADIUS 9.0
         REF_MOL 1YET_c.sd
         SMALL_SPHERE 1.0
         TRACE 1

@@ -738,7 +738,7 @@ namespace Rbt
   {
   public:
     explicit isAtomSubgraph() {}
-    RbtBool operator()(const RbtAtom *pAtom) const { return (pAtom->GetAtomId() > 0); }
+    RbtBool operator()(const RbtAtom *pAtom) const { return (pAtom->GetAtomId() == 11); }
   };
 
   // Is atom defined as an anionic interaction center ?
