@@ -144,6 +144,14 @@ class RbtPosChargeConstraint : public RbtConstraint
   static RbtInt counter;
 };
 
+class RbtSubgraphConstraint : public RbtConstraint
+{
+    public:
+  RbtSubgraphConstraint(RbtCoord c, RbtDouble t) : RbtConstraint(c,t){};
+  void AddAtomList(RbtModelPtr, RbtBool bCheck=true) throw(RbtError);
+  static RbtInt counter;
+};
+
 class RbtRingAromaticConstraint : public RbtConstraint
 {
     public:
@@ -151,5 +159,7 @@ class RbtRingAromaticConstraint : public RbtConstraint
   void AddAtomList(RbtModelPtr, RbtBool bCheck=true) throw(RbtError);
   static RbtInt counter;
 };
+
+
 
 #endif //_RbtConstraint_H_

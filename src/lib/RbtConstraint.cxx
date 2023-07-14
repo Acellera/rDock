@@ -27,6 +27,7 @@ RbtInt RbtHydroAliphaticConstraint::counter = 0;
 RbtInt RbtHydroAromaticConstraint::counter = 0;
 RbtInt RbtNegChargeConstraint::counter = 0;
 RbtInt RbtPosChargeConstraint::counter = 0;
+RbtInt RbtSubgraphConstraint::counter = 0;
 RbtInt RbtRingAromaticConstraint::counter = 0;
 
 RbtConstraint::RbtConstraint(RbtCoord c, RbtDouble t)
@@ -135,6 +136,10 @@ RbtConstraintPtr Rbt::CreateConstraint(RbtCoord& c, RbtDouble& t, RbtString& n, 
     if (bCount) RbtHydroAromaticConstraint::counter++;
     return new RbtHydroAromaticConstraint(c,t);
   }
+  else if (n == "Sub") {
+    if (bCount) RbtSubgraphConstraint::counter++;
+    return new RbtSubgraphConstraint(c,t);
+  }  
   else
     throw RbtError(_WHERE_,"Constraint " + n + " not recognized");
 }
@@ -150,6 +155,7 @@ void Rbt::ZeroCounters()
   RbtNegChargeConstraint::counter = 0;
   RbtPosChargeConstraint::counter = 0;
   RbtRingAromaticConstraint::counter = 0;
+  RbtSubgraphConstraint::counter = 0;
 }
 
 void Rbt::ReadConstraint(istream& ifile, RbtConstraintPtr& cnt, RbtBool bCount)
@@ -334,6 +340,16 @@ void RbtPosChargeConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) throw 
   }
 }
 
+void RbtSubgraphConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) throw (RbtError)
+{
+  m_atomList = Rbt::GetAtomList(lig->GetAtomList(), Rbt::isAtomSubgraph());
+  if (bCheck && (m_atomList.size() < counter)) {
+    ostringstream ostr;
+    ostr << "The ligand has only " << m_atomList.size() 
+	 << " atom(s) belonging to that subgraph type (" << counter << " required)" << ends;
+    throw RbtLigandError(_WHERE_, ostr.str());
+  }
+}
 
 void RbtRingAromaticConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) throw (RbtError)
 {
