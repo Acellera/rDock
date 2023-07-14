@@ -736,9 +736,11 @@ namespace Rbt
   // Is this atom part of the subgraph specified by the user?
   class isAtomSubgraph : public std::unary_function<RbtAtom *, RbtBool>
   {
+    RbtInt n;
+
   public:
-    explicit isAtomSubgraph() {}
-    RbtBool operator()(const RbtAtom *pAtom) const { return (pAtom->GetAtomId() == 11); }
+    explicit isAtomSubgraph(RbtInt nn) : n(nn) {}
+    RbtBool operator()(const RbtAtom *pAtom) const { return pAtom->GetAtomId() == n; }
   };
 
   // Is atom defined as an anionic interaction center ?
