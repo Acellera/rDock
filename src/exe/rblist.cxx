@@ -213,12 +213,18 @@ int main(int argc,char* argv[])
       //Create the ligand model
       RbtModelPtr spModel(new RbtModel(spMdlFileSource));
       RbtString strModelName = spModel->GetName();
+      Rbt::isAtomLipophilic bIsLipo;
+      Rbt::isAtomHBondDonor bIsHBD;
+      Rbt::isAtomHBondAcceptor bIsHBA;
+      Rbt::isAtomMetal bIsMetal;
+      Rbt::isHybridState_eq bIsArom(RbtAtom::AROM);      
 
       if (bList) {
 	RbtAtomList atomList = spModel->GetAtomList();
 	cout << endl << "Model = " << spModel->GetName() << endl;
 	for (RbtAtomListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
-	  cout << (**iter) << endl;
+	  RbtDouble chg = (*iter)->GetGroupCharge();
+	  cout << (**iter) << ", Lipo=" << bIsLipo(*iter) << ", Arom=" << bIsArom(*iter) << ", HBD=" << bIsHBD(*iter) << ", HBA=" << bIsHBA(*iter) << ", Metal=" << bIsMetal(*iter) << endl;
 	}
 	//continue;
       }
@@ -235,7 +241,6 @@ int main(int argc,char* argv[])
       RbtBondList bondList = spModel->GetBondList();
 
 
-      Rbt::isHybridState_eq bIsArom(RbtAtom::AROM);
       RbtInt nLipoC = Rbt::GetNumAtoms(atomList,Rbt::isAtomLipophilic());
       RbtInt nAromAtoms = Rbt::GetNumAtoms(atomList,bIsArom);//# aromatic atoms
       RbtInt nNHBD = Rbt::GetNumAtoms(atomList,Rbt::isAtomHBondDonor());
