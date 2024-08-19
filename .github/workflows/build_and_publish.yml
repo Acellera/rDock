@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: ["ubuntu-latest"]
         python-version: ["3.10"]
-        container: ["quay.io/pypa/manylinux2014_x86_64"]
+        container: ["quay.io/pypa/manylinux_2_28_x86_64"]
 
     defaults: # Needed for conda
       run:
