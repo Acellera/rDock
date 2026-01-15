@@ -62,8 +62,11 @@ void RbtTetherSF::SetupReceptor()
   if (GetReceptor().Null())
     return;
   RbtString strWSName = GetWorkSpace()->GetName();
+  cout << "strWSName: " << strWSName << endl;
   RbtString refExt = GetParameter(_REFERENCE_FILE);
-  RbtString refFile = Rbt::GetRbtFileName("", strWSName + refExt);
+  cout << "refExt: " << refExt << endl;
+  RbtString refFile = Rbt::GetRbtFileName("", refExt);
+  cout << "refFile: " << refFile << endl;
   RbtMolecularFileSourcePtr spReferenceSD(new RbtMdlFileSource(refFile, false, false, true));
   RbtModelPtr spReferenceMdl(new RbtModel(spReferenceSD));
   RbtStringList strTetherAtomsL = spReferenceMdl->GetDataValue("TETHERED ATOMS");
@@ -72,6 +75,7 @@ void RbtTetherSF::SetupReceptor()
   for (RbtIntListIter iter = tetherAtomsId.begin(); iter < tetherAtomsId.end(); iter++)
   {
     m_tetherCoords.push_back(refAtoms[*iter]->GetCoords());
+    cout << "m_tetherCoords: " << m_tetherCoords.back() << endl;
   }
 }
 
@@ -103,7 +107,10 @@ RbtDouble RbtTetherSF::RawScore() const
   RbtDouble score(0.0);
   RbtInt i = 0;
   for (RbtIntListConstIter iter = m_tetherAtomList.begin(); iter < m_tetherAtomList.end(); iter++, i++)
+  {
     score += Rbt::Length2(m_ligAtomList[*iter]->GetCoords(), m_tetherCoords[i]);
+  }
+
   return score;
 }
 

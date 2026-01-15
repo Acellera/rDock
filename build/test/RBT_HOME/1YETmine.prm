@@ -26,12 +26,7 @@ SECTION CAVITY
         WEIGHT                  1.0
 END_SECTION
 
-#################################
-## PHARMACOPHORIC RESTRAINTS
-#################################
-SECTION PHARMA
-    SCORING_FUNCTION RbtPharmaSF
-    WEIGHT 1.0
-    CONSTRAINTS_FILE mandatory_restraints.txt
-    NOPT 1
+SECTION TETHER
+	SCORING_FUNCTION	RbtTetherSF
+	REFERENCE_FILE	1YET_c.sd
 END_SECTION
