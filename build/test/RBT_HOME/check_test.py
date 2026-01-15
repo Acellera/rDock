@@ -22,6 +22,7 @@ for check in checkcoords:
     if check > 0.01:
         error = 1
 if abs(refscore - testscore) > 0.01:
+    print(f"Score difference: {refscore} - {testscore} = {refscore - testscore}")
     error = 1
 
 if error == 1:
