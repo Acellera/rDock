@@ -1,11 +1,11 @@
 /***********************************************************************
-* The rDock program was developed from 1998 - 2006 by the software team 
+* The rDock program was developed from 1998 - 2006 by the software team 
 * at RiboTargets (subsequently Vernalis (R&D) Ltd).
-* In 2006, the software was licensed to the University of York for 
+* In 2006, the software was licensed to the University of York for 
 * maintenance and distribution.
 * In 2012, Vernalis and the University of York agreed to release the 
 * program as Open Source software.
-* This version is licensed under GNU-LGPL version 3.0 with support from
+* This version is licensed under GNU-LGPL version 3.0 with support from
 * the University of Barcelona.
 * http://rdock.sourceforge.net/
 ***********************************************************************/
@@ -24,7 +24,8 @@ class RbtTetherSF : public RbtBaseInterSF
     static RbtString _CT;
     //Parameter names
     static RbtString _REFERENCE_FILE;
-        
+    static RbtString _PENALTY_FACTOR;
+    static RbtString _DISTANCE_THRESHOLD;
     RbtTetherSF(const RbtString& strName = "TETHER");
     virtual ~RbtTetherSF();
     
