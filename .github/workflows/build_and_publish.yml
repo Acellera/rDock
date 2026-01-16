@@ -23,16 +23,13 @@ jobs:
         shell: bash -l {0}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          auto-update-conda: true
+          miniconda-version: "latest"
+          activate-environment: ../deploy-env
           python-version: ${{ matrix.python-version }}
-          mamba-version: "*"
-          miniforge-variant: Mambaforge
-          channels: conda-forge,defaults
-          activate-environment: ../my-env
 
       - name: Install yum deps
         run: |
