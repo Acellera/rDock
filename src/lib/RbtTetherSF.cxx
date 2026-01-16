@@ -108,17 +108,17 @@ void RbtTetherSF::SetupScore()
 RbtDouble RbtTetherSF::RawScore() const
 {
   RbtDouble score(0.0);
-  RbtDouble t = GetParameter(_PENALTY_FACTOR);
-  RbtDouble d = GetParameter(_DISTANCE_THRESHOLD);
+  RbtDouble penalty_factor = GetParameter(_PENALTY_FACTOR);
+  RbtDouble distance_threshold = GetParameter(_DISTANCE_THRESHOLD);
   RbtInt i = 0;
   for (RbtIntListConstIter iter = m_tetherAtomList.begin(); iter < m_tetherAtomList.end(); iter++, i++)
   {
     RbtDouble dist = Rbt::Length2(m_ligAtomList[*iter]->GetCoords(), m_tetherCoords[i]);
-    if (dist > d) {
-      score += (t * 1.0);
+    if (dist > distance_threshold) {
+      score += (penalty_factor * 1.0);
     }
   }
-  //cout << "score: " << score << endl;
+
   return score;
 }
 
