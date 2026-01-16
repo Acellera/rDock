@@ -20,6 +20,7 @@ using std::istringstream;
 RbtString RbtTetherSF::_CT("RbtTetherSF");
 RbtString RbtTetherSF::_REFERENCE_FILE("REFERENCE_FILE");
 RbtString RbtTetherSF::_PENALTY_FACTOR("PENALTY_FACTOR");
+RbtString RbtTetherSF::_DISTANCE_THRESHOLD("DISTANCE_THRESHOLD");
 
 // NB - Virtual base class constructor (RbtBaseSF) gets called first,
 // implicit constructor for RbtBaseInterSF is called second
@@ -29,6 +30,7 @@ RbtTetherSF::RbtTetherSF(const RbtString &strName)
   // Add parameters It gets the right name in SetupReceptor
   AddParameter(_REFERENCE_FILE, "_reference.sd");
   AddParameter(_PENALTY_FACTOR, 1.0);
+  AddParameter(_DISTANCE_THRESHOLD, 0.5);
 #ifdef _DEBUG
   cout << _CT << " parameterised constructor" << endl;
 #endif //_DEBUG
@@ -107,12 +109,16 @@ RbtDouble RbtTetherSF::RawScore() const
 {
   RbtDouble score(0.0);
   RbtDouble t = GetParameter(_PENALTY_FACTOR);
+  RbtDouble d = GetParameter(_DISTANCE_THRESHOLD);
   RbtInt i = 0;
   for (RbtIntListConstIter iter = m_tetherAtomList.begin(); iter < m_tetherAtomList.end(); iter++, i++)
   {
-    score += Rbt::Length2(m_ligAtomList[*iter]->GetCoords(), m_tetherCoords[i]);
+    RbtDouble dist = Rbt::Length2(m_ligAtomList[*iter]->GetCoords(), m_tetherCoords[i]);
+    if (dist > d) {
+      score += (t * 1.0);
+    }
   }
-  score = score * t;
+  //cout << "score: " << score << endl;
   return score;
 }
 

@@ -25,6 +25,7 @@ class RbtTetherSF : public RbtBaseInterSF
     //Parameter names
     static RbtString _REFERENCE_FILE;
     static RbtString _PENALTY_FACTOR;
+    static RbtString _DISTANCE_THRESHOLD;
     RbtTetherSF(const RbtString& strName = "TETHER");
     virtual ~RbtTetherSF();
     
