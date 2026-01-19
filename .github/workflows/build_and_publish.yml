@@ -45,11 +45,11 @@ jobs:
 
       - name: Test package
         run: |
-          conda install -q -y ./pkg/linux-64/rdock-*.tar.bz2
+          conda install -q -y ./pkg/linux-64/rdock-*.conda
           conda install -q -y pytest
           pytest ./tests/
 
       - name: Upload to conda
         shell: bash -l {0}
         run: |
-          anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ./pkg/*/rdock-*.tar.bz2
+          anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ./pkg/*/rdock-*.conda
