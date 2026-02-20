@@ -87,14 +87,12 @@ void RbtTetherSF::SetupLigand()
   for (RbtIntListIter iter = m_tetherAtomList.begin(); iter < m_tetherAtomList.end(); iter++)
   {
     m_tetherCoords.push_back(m_ligAtomList[*iter]->GetCoords());
-    cout << "intial conf tetherCoords: " << m_tetherCoords.back() << endl;
   }
 
   if (m_tetherAtomList.size() != m_tetherCoords.size())
     throw RbtBadArgument(_WHERE_,
                          "the number of tethered atoms in the ligand SD file should be the same than in the reference SD file");
 
-  
 #ifdef _DEBUG
   cout << _CT << "::SetupLigand(): #ATOMS = " << m_ligAtomList.size() << endl;
 #endif //_DEBUG
@@ -114,7 +112,8 @@ RbtDouble RbtTetherSF::RawScore() const
   for (RbtIntListConstIter iter = m_tetherAtomList.begin(); iter < m_tetherAtomList.end(); iter++, i++)
   {
     RbtDouble dist = Rbt::Length2(m_ligAtomList[*iter]->GetCoords(), m_tetherCoords[i]);
-    if (dist > distance_threshold) {
+    if (dist > distance_threshold)
+    {
       score += (penalty_factor * 1.0);
     }
   }
