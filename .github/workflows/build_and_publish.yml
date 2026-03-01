@@ -42,6 +42,7 @@ jobs:
           git config --global --add safe.directory '*'
           conda install anaconda-client conda-build conda-verify
           conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload -c conda-forge
+          echo ./pkg/linux-64/rdock-*.tar.bz2; ls -l ./pkg/linux-64
 
       - name: Test package
         run: |
