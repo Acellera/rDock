@@ -25,7 +25,6 @@
 RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName) : m_bMultiRec(false), m_bFileOpen(false)
 {
 	m_strFileName = fileName;
-	m_szBuf = new char[MAXLINELENGTH+1];//DM 24 Mar - allocate line buffer
 	ClearCache();
 	_RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
 }
@@ -35,7 +34,6 @@ RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName) : m_bMultiRec(fa
 m_bMultiRec(true), m_strRecDelim(strRecDelim), m_bFileOpen(false)
 {
 	m_strFileName = fileName;
-	m_szBuf = new char[MAXLINELENGTH+1];//DM 24 Mar - allocate line buffer
 	ClearCache();
 	_RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
 }
@@ -46,7 +44,6 @@ RbtBaseFileSource::~RbtBaseFileSource()
 {
 	Close();
 	ClearCache();
-	delete [] m_szBuf;//DM 24 Mar - delete line buffer
 	_RBTOBJECTCOUNTER_DESTR_("RbtBaseFileSource");
 }
 
@@ -137,6 +134,9 @@ void RbtBaseFileSource::Rewind()
 
 void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) throw (RbtError)
 {
+	//DM - read into a std::string so there is no limit on line length;
+	//long SD data field names or values no longer overflow a fixed buffer
+	RbtString strBuf;
 	//If we haven't already read the file, do it now
 	if (!m_bReadOK) {
 		if(aDelimiterAtEnd) {
@@ -149,19 +149,19 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) throw (RbtError)
 				if (m_bMultiRec) {
 					const char* cszRecDelim = m_strRecDelim.c_str();
 					RbtInt n = strlen(cszRecDelim);
-					while( (m_fileIn.getline(m_szBuf,MAXLINELENGTH))  &&
-						(strncmp(m_szBuf,cszRecDelim,n) != 0) ) {
+					while( (std::getline(m_fileIn,strBuf))  &&
+						(strncmp(strBuf.c_str(),cszRecDelim,n) != 0) ) {
 #ifdef _DEBUG
-							cout << m_szBuf << endl;
+							cout << strBuf << endl;
 #endif //_DEBUG
-							m_lineRecs.push_back(m_szBuf);
+							m_lineRecs.push_back(strBuf);
 						}
 				}
 				//Single-record read
 				//Read entire file and close immediately
 				else {
-					while(m_fileIn.getline(m_szBuf,MAXLINELENGTH)) {
-						m_lineRecs.push_back(m_szBuf);
+					while(std::getline(m_fileIn,strBuf)) {
+						m_lineRecs.push_back(strBuf);
 					}
 					Close();
 				}
@@ -186,22 +186,22 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) throw (RbtError)
 					RbtInt 		n			= strlen(cszRecDelim);
 					// skip to the header stuff until the first record
 					// AND the first delimiter line
-					while( (m_fileIn.getline(m_szBuf,MAXLINELENGTH))  && 
-						(strncmp(m_szBuf,cszRecDelim,n) != 0) )
+					while( (std::getline(m_fileIn,strBuf))  &&
+						(strncmp(strBuf.c_str(),cszRecDelim,n) != 0) )
 						;
-					while( (m_fileIn.getline(m_szBuf,MAXLINELENGTH))  && 
-						(strncmp(m_szBuf,cszRecDelim,n) != 0) ) {
+					while( (std::getline(m_fileIn,strBuf))  &&
+						(strncmp(strBuf.c_str(),cszRecDelim,n) != 0) ) {
 #ifdef _DEBUG
-							cout << m_szBuf << endl;
+							cout << strBuf << endl;
 #endif //_DEBUG
-							m_lineRecs.push_back(m_szBuf);
+							m_lineRecs.push_back(strBuf);
 						}
 				}
 				//Single-record read
 				//Read entire file and close immediately
 				else {
-					while(m_fileIn.getline(m_szBuf,MAXLINELENGTH)) {
-						m_lineRecs.push_back(m_szBuf);
+					while(std::getline(m_fileIn,strBuf)) {
+						m_lineRecs.push_back(strBuf);
 					}
 					Close();
 				}
