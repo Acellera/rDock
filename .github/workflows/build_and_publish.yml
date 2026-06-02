@@ -40,7 +40,7 @@ jobs:
         shell: bash -l {0}
         run: |
           git config --global --add safe.directory '*'
-          conda install anaconda-client conda-build conda-verify
+          conda install -n base -y anaconda-client conda-build conda-verify
           conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload -c conda-forge
 
       - name: Test package
