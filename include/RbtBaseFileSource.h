@@ -25,9 +25,6 @@ typedef RbtString RbtFileRec;
 typedef vector<RbtFileRec> RbtFileRecList;
 typedef RbtFileRecList::iterator RbtFileRecListIter;
 
-//Max line length expected in file
-const int MAXLINELENGTH = 255;
-
 class RbtBaseFileSource
 {
  public:
@@ -88,7 +85,6 @@ class RbtBaseFileSource
   RbtString m_strFileName;
   RbtBool m_bReadOK;//For use by Read
   ifstream m_fileIn;
-  char* m_szBuf;//Line buffer
   RbtBool m_bFileOpen;//Keep track of whether we've opened the file or not
   RbtBool m_bMultiRec;//Is file multi-record ?
   RbtString m_strRecDelim;//Record delimiter

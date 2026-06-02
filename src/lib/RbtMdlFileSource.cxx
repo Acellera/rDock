@@ -202,6 +202,12 @@ void RbtMdlFileSource::Parse() throw(RbtError)
               sl.push_back(*fileIter);
             }
             m_dataMap[fieldName] = RbtVariant(sl);
+            // The inner loop above may have advanced fileIter to fileEnd
+            // (data value runs to the end of the record with no trailing
+            // blank line). Stop here so the outer loop's increment does not
+            // step past fileEnd and dereference an invalid iterator.
+            if (fileIter == fileEnd)
+              break;
           }
         }
       }
