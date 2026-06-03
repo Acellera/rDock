@@ -49,8 +49,19 @@ void RbtChromDihedralElement::Randomise() {
     RbtDouble delta;
     switch (m_spRefData->GetMode()) {
         case RbtChromElement::TETHERED:
-            delta = 2.0 * maxDelta * GetRand().GetRandom01() - maxDelta;
-            m_value = StandardisedValue(m_spRefData->GetInitialValue() + delta);
+            // Seed the initial population close to the tethered reference
+            // conformation instead of scattering each dihedral uniformly across
+            // +/-MAX_DIHEDRAL (which throws away the reference geometry we are
+            // tethered to). Every dihedral gets an independent tiny random
+            // perturbation (at most 1 degree, and never beyond the tether
+            // limit): the population stays near the reference while still giving
+            // the GA per-dihedral diversity across the whole chromosome. The
+            // GA's Mutate() still explores the full tethered range during search.
+            {
+                const RbtDouble tinyDelta = (maxDelta < 1.0) ? maxDelta : 1.0;
+                delta = 2.0 * tinyDelta * GetRand().GetRandom01() - tinyDelta;
+                m_value = StandardisedValue(m_spRefData->GetInitialValue() + delta);
+            }
             break;
         case RbtChromElement::FREE:
             m_value = 360.0 * GetRand().GetRandom01() - 180.0;
