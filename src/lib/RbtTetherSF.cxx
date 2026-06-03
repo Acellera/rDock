@@ -78,6 +78,8 @@ void RbtTetherSF::SetupReceptor()
 void RbtTetherSF::SetupLigand()
 {
   m_ligAtomList.clear();
+  m_tetherCoords.clear(); // DM - must reset, else tether coords accumulate across
+                          // successive ligands and the size check below wrongly fails
   if (GetLigand().Null())
     return;
 
@@ -111,10 +113,17 @@ RbtDouble RbtTetherSF::RawScore() const
   RbtInt i = 0;
   for (RbtIntListConstIter iter = m_tetherAtomList.begin(); iter < m_tetherAtomList.end(); iter++, i++)
   {
-    RbtDouble dist = Rbt::Length2(m_ligAtomList[*iter]->GetCoords(), m_tetherCoords[i]);
-    if (dist > distance_threshold)
+    // Smooth restraint: zero penalty while the atom stays within
+    // DISTANCE_THRESHOLD (in Angstroms) of its tether point, then linear in the
+    // displacement beyond it. This avoids the old discontinuous step penalty,
+    // which gave the optimizer no gradient toward compliance (an atom 5 A out
+    // scored the same as one just over the threshold), while keeping the
+    // penalty on a comparable scale (penalty_factor per Angstrom of drift).
+    RbtDouble dist = Rbt::Length(m_ligAtomList[*iter]->GetCoords(), m_tetherCoords[i]);
+    RbtDouble dr = dist - distance_threshold;
+    if (dr > 0.0)
     {
-      score += (penalty_factor * 1.0);
+      score += penalty_factor * dr;
     }
   }
 
