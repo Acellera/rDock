@@ -89,6 +89,24 @@ void RbtGATransform::Execute() {
   RbtBool bHistory = nHisFreq > 0;
   RbtInt iTrace = GetTrace();
 
+  //A chromosome of zero length means there is nothing to search: the ligand
+  //has no rotatable bonds and its position and orientation are both fixed,
+  //as happens in tethered docking with zero translation and rotation ranges.
+  //Every genome is then identical, so parent selection can never find two
+  //distinct genomes and the GA aborts on "not enough diversity". There is
+  //only one pose to score, so keep it and skip the search.
+  if (pop->Best()->GetChrom()->GetLength() == 0) {
+    if (iTrace > 0) {
+      cout << endl
+           << "Ligand has no degrees of freedom (fixed position and "
+              "orientation, no rotatable bonds) - skipping GA" << endl;
+    }
+    pop->Best()->GetChrom()->SyncToModel();
+    RbtInt ri = GetReceptor()->GetCurrentCoords();
+    GetLigand()->SetDataValue("RI", ri);
+    return;
+  }
+
   RbtDouble bestScore = pop->Best()->GetScore();
    //Number of consecutive cycles with no improvement in best score
   RbtInt iConvergence = 0;

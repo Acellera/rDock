@@ -63,7 +63,16 @@ void RbtRandPopTransform::Execute() {
     if (bScale) {
         RbtInt chromLength = m_chrom->GetLength();
         popSize *= chromLength;
-    } 
+        //A zero-length chromosome scales the population down to nothing, which
+        //the RbtPopulation constructor rejects. This happens for a ligand with
+        //no rotatable bonds whose position and orientation are both fixed, as
+        //in tethered docking with zero translation and rotation ranges. There
+        //is exactly one pose to represent, so keep a population of one; the GA
+        //detects the same condition and skips its search.
+        if (popSize < 1) {
+            popSize = 1;
+        }
+    }
     if (GetTrace() > 3) {
         cout << _CT << ": popSize=" << popSize << endl;
     }
