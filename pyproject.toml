@@ -4,8 +4,9 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "acellera-rdock"
-dynamic = ["version"]
+version = "2022.0.post7"
 description = "A Fast, Versatile and Open Source Program for Docking Ligands to Proteins and Nucleic Acids"
+readme = "README.md"
 license = "LGPL-3.0-only"
 license-files = ["license.txt"]
 requires-python = ">=3.9"
@@ -38,13 +39,6 @@ minimum-version = "build-system.requires"
 wheel.packages = ["python/rdock"]
 # Only executables inside, so one wheel serves every Python version
 wheel.py-api = "py3"
-
-# The conda version (e.g. 2022.0+7) is the single source; PyPI rejects "+7", so it becomes 2022.0.post7
-[tool.scikit-build.metadata.version]
-provider = "scikit_build_core.metadata.regex"
-input = "conda-package/meta.yaml"
-regex = 'version: "(?P<base>[\d.]+)\+(?P<post>\d+)"'
-result = "{base}.post{post}"
 
 [tool.cibuildwheel]
 build = "cp312-manylinux_*"

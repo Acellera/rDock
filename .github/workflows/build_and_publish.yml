@@ -7,53 +7,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ["ubuntu-latest"]
-        python-version: ["3.10"]
-        container: ["quay.io/pypa/manylinux_2_28_x86_64"]
-
-    defaults: # Needed for conda
-      run:
-        shell: bash -l {0}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniconda-version: "latest"
-          activate-environment: ../deploy-env
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install yum deps
-        run: |
-          yum groupinstall -y "Development Tools"
-          yum install -y popt-devel cppunit-devel
-
-      - name: Build rDock package
-        shell: bash -l {0}
-        run: |
-          git config --global --add safe.directory '*'
-          conda install -y anaconda-client conda-build conda-verify
-          conda-build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload -c conda-forge
-
-      - name: Test package
-        run: |
-          conda install -q -y ./pkg/linux-64/rdock-*.conda
-          conda install -q -y pytest
-          pytest ./tests/
-
-      - name: Upload to conda
-        shell: bash -l {0}
-        run: |
-          anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ./pkg/*/rdock-*.conda
-
   wheels:
     runs-on: ubuntu-latest
     permissions:

@@ -1,8 +1,8 @@
-# Build used for the pip wheel (pyproject.toml). The conda package still uses build/makefile.
+# Build used for the pip wheel (pyproject.toml).
 cmake_minimum_required(VERSION 3.18)
 project(rDock CXX)
 
-# Same flags as build/tmakelib/linux-g++-64/tmake.conf. No -DNDEBUG, so asserts stay on like in the make build.
+# Flags kept from the old tmake build. No -DNDEBUG, so asserts stay on as they did there.
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ffast-math")
 add_compile_options(-std=c++14 -fpermissive -w)
 add_compile_definitions(_NDEBUG)
