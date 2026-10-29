@@ -1,90 +1,29 @@
-# rDOCK BUILD INSTRUCTIONS
+# rDock
+
+rDock is a fast, versatile and open-source program for docking ligands to proteins and nucleic acids.
+This is Acellera's fork of [CBDD/rDock](https://github.com/CBDD/rDock), with improvements to tethered docking and several crash fixes.
+The user guide and getting started guide are in `docs/`.
+
+## Installation
 
 ```
-In this file you have the basic commands for installing rDock in 32- or 64-bits linux computers.
- For a more detailed explanation, please open the Getting Started guide or full documentation 
- in our webpage or in docs folder.
+pip install acellera-rdock
 ```
 
-## BACKGROUND
+Wheels are available for Linux x86_64.
+This puts the rDock programs (`rbdock`, `rbcavity`, `rblist`, ...) and the `sd*` tools on your PATH and sets `RBT_ROOT` for them, so no environment setup is needed.
+The Perl tools (`sdsort`, `sdfilter`, `sdreport`, ...) need a system `perl`.
 
-rDock is written in C++ and makes heavy use of the C++ Standard Template Library (STL).
-All source code is compiled into a single shared library (libRbt.so).
-The executables are light-weight command-line applications linked with libRbt.so.
+## Building from source
 
-rDock should compile on the majority of Unix/Linux platforms with little or no
-modification. However, only the following combinations have been thoroughly
-tested:
-
-openSUSE 32 and 64 bits.
-Ubuntu 32 and 64 bits.
-*  Both with compiler versions higher than 3.3.
-
-
-### PREREQUISITES:
-
-Make sure you have the following packages installed:
-
-*  gcc		GNU C compiler (or your preferred C compiler)
-*  g++		GNU C++ compiler (or your preferred C++ compiler)
-*  make
-*  popt		Command-line argument processing (run-time)
-*  popt-devel	Command-line argument processing (compile-time)
-*  cppunit		C++ unit testing framework (port of JUnit)
-*  cppunit-devel		C++ unit testing framework (port of JUnit)
-
-After installing these dependencies, please follow the following steps:
-
-## BASIC BUILD INSTRUCTIONS:
-
-### Step 1) BUILD
-
-* Change current directory to build folder:
-```
-$ cd rDock_2021.1_src/build
-```
-And run, either:
+You need a C++ compiler and the popt headers (`popt-devel` or `libpopt-dev`).
 
 ```
-$ make linux-g++           #for 32-bit build with g++ compiler
-$ make linux-g++-64        #for 64-bit build with g++ compiler
+pip install .
+pytest tests/
 ```
 
-If wish to use a different compiler/architecture combination, or if you wish to
-change the compiler flags, see below.
+## Releasing
 
-The built libraries and executables are copied to their run-time locations
-(../lib and ../bin) as part of Step 1.
-
-### Step 2) TEST
-
-```
-$ make test                #Runs rDock unit tests
-```
-
-If the test has succeed, you are done, enjoy using rDock!
-Otherwise, please check your dependencies and all the previous commands or go to 
-Support Section in the webpage (http://rdock.sourceforge.net) to ask for help.
-
-### Step 3) INSTALL
-
-You can either run rDock directly from the build location initial testing), or 
-install the binaries and data files to a new location.
-
-Set the necessary environmental variables for running rDock in the command line.
-(for example, in a bash shell):
-
-```
-$ export RBT_ROOT=/path/to/rDock/installation/
-$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$RBT_ROOT/lib
-$ export PATH=$PATH:$RBT_ROOT/bin
-```
-
-### OTHER MAKE TARGETS
-
-`make src_dist` 		Creates source distribution
-
-`make clean`              Removes all intermediate build files
-
-`make distclean`         Also removes installed libs and exes in ../lib and ../bin
-
+Bump `version` in `pyproject.toml` and push to `main`.
+CI builds and tests the wheel with cibuildwheel and uploads it to PyPI.

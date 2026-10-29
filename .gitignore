@@ -1,8 +1,1 @@
 __pycache__
-bin/rbcalcgrid
-bin/rbcavity
-bin/rbdock
-bin/rblist
-bin/rbmoegrid
-build/linux-g++-64/
-build/Makefile.linux*
