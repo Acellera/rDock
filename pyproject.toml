@@ -1,0 +1,53 @@
+[build-system]
+requires = ["scikit-build-core>=0.11"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "acellera-rdock"
+dynamic = ["version"]
+description = "A Fast, Versatile and Open Source Program for Docking Ligands to Proteins and Nucleic Acids"
+license = "LGPL-3.0-only"
+license-files = ["license.txt"]
+requires-python = ">=3.9"
+dependencies = ["numpy", "openbabel-wheel"]
+
+[project.urls]
+Homepage = "https://github.com/Acellera/rDock"
+
+[project.scripts]
+rbdock = "rdock:main"
+rbcavity = "rdock:main"
+rbmoegrid = "rdock:main"
+rblist = "rdock:main"
+rbcalcgrid = "rdock:main"
+"make_grid.csh" = "rdock:main"
+rbhtfinder = "rdock:main"
+"run_rbdock.pl" = "rdock:main"
+"run_rbscreen.pl" = "rdock:main"
+sdfield = "rdock:main"
+sdfilter = "rdock:main"
+sdmodify = "rdock:main"
+sdreport = "rdock:main"
+sdrmsd = "rdock:main"
+sdsort = "rdock:main"
+sdsplit = "rdock:main"
+sdtether = "rdock:main"
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+wheel.packages = ["python/rdock"]
+# Only executables inside, so one wheel serves every Python version
+wheel.py-api = "py3"
+
+# The conda version (e.g. 2022.0+7) is the single source; PyPI rejects "+7", so it becomes 2022.0.post7
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "conda-package/meta.yaml"
+regex = 'version: "(?P<base>[\d.]+)\+(?P<post>\d+)"'
+result = "{base}.post{post}"
+
+[tool.cibuildwheel]
+build = "cp312-manylinux_*"
+before-all = "yum install -y popt-devel"
+test-requires = "pytest"
+test-command = "rbdock --help && sdrmsd --help && sdsort -h && pytest {project}/tests"

@@ -53,3 +53,21 @@ jobs:
         shell: bash -l {0}
         run: |
           anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ./pkg/*/rdock-*.conda
+
+  wheels:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # PyPI trusted publishing
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and test wheel
+        uses: pypa/cibuildwheel@v4.3.5
+
+      - name: Upload to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: wheelhouse/
+          skip-existing: true
